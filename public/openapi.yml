@@ -49,22 +49,19 @@ servers:
     description: Development
     variables:
       port:
-        default: '4321'
+        default: "4321"
 tags:
   - name: Game Data
-    description:
-      Endpoints relating to game data, such as custom deliveries, roulette types, and allied societies. These
+    description: Endpoints relating to game data, such as custom deliveries, roulette types, and allied societies. These
       endpoints are auto-generated using data from [v2.xivapi.com](https://v2.xivapi.com/) extracted using the
       [`@xivapi/js`](https://github.com/xivapi/xivapi-js) package, check them out for more information.
   - name: Characters
-    description:
-      Endpoints relating to scraped Lodestone character data, such as character names, titles, and other metadata
+    description: Endpoints relating to scraped Lodestone character data, such as character names, titles, and other metadata
       - such as achievements, minions and mounts.
   - name: User
     description: Endpoints relating to the user account. All endpoints require an API key authentication.
   - name: Collections
-    description:
-      Endpoints relating to the collection data being tracked by the user. All endpoints require an API key
+    description: Endpoints relating to the collection data being tracked by the user. All endpoints require an API key
       authentication.
 components:
   securitySchemes:
@@ -92,7 +89,7 @@ components:
         bonus:
           type:
             - string
-            - 'null'
+            - "null"
       required:
         - name
         - poetics
@@ -163,7 +160,7 @@ components:
                 - name
                 - title
               additionalProperties: false
-            - type: 'null'
+            - type: "null"
       required:
         - id
         - name
@@ -197,13 +194,13 @@ components:
                 - name
                 - title
               additionalProperties: false
-            - type: 'null'
+            - type: "null"
         title:
           type: string
         portrait:
           type:
             - string
-            - 'null'
+            - "null"
         score:
           type: number
           default: 0
@@ -221,31 +218,31 @@ components:
                 - total
                 - score
               additionalProperties: false
-            - type: 'null'
+            - type: "null"
         minions:
           type:
             - number
-            - 'null'
+            - "null"
           default: 0
         mounts:
           type:
             - number
-            - 'null'
+            - "null"
           default: 0
         facewear:
           type:
             - number
-            - 'null'
+            - "null"
           default: 0
         deliveries:
           type: array
           items:
-            $ref: '#/components/schemas/DeliveryEntry'
+            $ref: "#/components/schemas/DeliveryEntry"
           default: []
         societies:
           type: array
           items:
-            $ref: '#/components/schemas/SocietyEntry'
+            $ref: "#/components/schemas/SocietyEntry"
           default: []
         public:
           type: boolean
@@ -284,7 +281,7 @@ components:
         image:
           type:
             - string
-            - 'null'
+            - "null"
       additionalProperties: false
     Response:
       type: object
@@ -330,20 +327,20 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: Success
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/QueryCharacter'
+                  $ref: "#/components/schemas/QueryCharacter"
         default:
           description: An error occurred
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Response'
+                $ref: "#/components/schemas/Response"
   /game/deliveries:
     get:
       summary: Get delivery satisfaction NPCs
@@ -351,14 +348,14 @@ paths:
       tags:
         - Game Data
       responses:
-        '200':
+        "200":
           description: A JSON array of delivery entries
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/DeliveryEntry'
+                  $ref: "#/components/schemas/DeliveryEntry"
   /game/roulette:
     get:
       summary: Get roulette data
@@ -366,14 +363,14 @@ paths:
       tags:
         - Game Data
       responses:
-        '200':
+        "200":
           description: A JSON array of roulette entries
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/RouletteEntry'
+                  $ref: "#/components/schemas/RouletteEntry"
   /game/societies:
     get:
       summary: Get beast tribe societies data
@@ -381,14 +378,14 @@ paths:
       tags:
         - Game Data
       responses:
-        '200':
+        "200":
           description: A JSON array of society entries
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/SocietyEntry'
+                  $ref: "#/components/schemas/SocietyEntry"
   /user/characters:
     get:
       summary: Get user's characters
@@ -398,30 +395,29 @@ paths:
       security:
         - apiKeyHeader: []
       responses:
-        '200':
+        "200":
           description: Characters found
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Character'
-        '401':
+                  $ref: "#/components/schemas/Character"
+        "401":
           description: Unauthorized, missing or invalid API key.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
-        '404':
+                $ref: "#/components/schemas/Error"
+        "404":
           description: Not found, user has no characters saved.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
     put:
       summary: Update user's characters
-      description:
-        Update the user's saved characters list. If the character(s) already exist in the list, they will not be
+      description: Update the user's saved characters list. If the character(s) already exist in the list, they will not be
         duplicated. Requires an API key authentication.
       tags:
         - User
@@ -436,29 +432,28 @@ paths:
                 type: string
         required: true
       responses:
-        '200':
+        "200":
           description: Success, returns the updated list of character IDs.
           content:
             application/json:
               schema:
                 type: object
-        '400':
+        "400":
           description: Bad request, invalid or missing character IDs.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
-        '401':
+                $ref: "#/components/schemas/Error"
+        "401":
           description: Unauthorized, missing or invalid API key.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
   /characters/{id}/deliveries:
     put:
       summary: Update character's custom deliveries
-      description:
-        Updates the satisfaction level and completion status for provided custom deliveries. This endpoint will
+      description: Updates the satisfaction level and completion status for provided custom deliveries. This endpoint will
         also add new deliveries to the character if they are not already present. Requires an API key authentication.
       tags:
         - Characters
@@ -477,26 +472,25 @@ paths:
             schema:
               type: array
               items:
-                $ref: '#/components/schemas/DeliveryEntry'
+                $ref: "#/components/schemas/DeliveryEntry"
         required: true
       responses:
-        '200':
+        "200":
           description: Success
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Response'
+                $ref: "#/components/schemas/Response"
         default:
           description: An error occurred
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Response'
+                $ref: "#/components/schemas/Response"
   /characters/{id}:
     get:
       summary: Get character from identifier
-      description:
-        Gets a Lodestone character from an identifier, these characters are private by default. To access character
+      description: Gets a Lodestone character from an identifier, these characters are private by default. To access character
         collection data, you must be authenticated using an API key.
       tags:
         - Characters
@@ -508,23 +502,22 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: Success
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Character'
+                $ref: "#/components/schemas/Character"
         default:
           description: An error occurred
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Response'
+                $ref: "#/components/schemas/Response"
   /characters/{id}/societies:
     put:
       summary: Update character's allied societies
-      description:
-        Updates the reputation level and completion status for provided allied societies. This endpoint will also
+      description: Updates the reputation level and completion status for provided allied societies. This endpoint will also
         add new societies to the character if they are not already present. Requires an API key authentication.
       tags:
         - Characters
@@ -543,18 +536,18 @@ paths:
             schema:
               type: array
               items:
-                $ref: '#/components/schemas/SocietyEntry'
+                $ref: "#/components/schemas/SocietyEntry"
         required: true
       responses:
-        '200':
+        "200":
           description: Success
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Response'
+                $ref: "#/components/schemas/Response"
         default:
           description: An error occurred
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Response'
+                $ref: "#/components/schemas/Response"

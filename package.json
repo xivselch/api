@@ -13,7 +13,7 @@
   "bugs": "https://github.com/xivselch/api/issues",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build && docs:build",
+    "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
     "format": "prettier --write .",
