@@ -5,6 +5,8 @@ import { db } from '~/db/client';
 
 export const auth = betterAuth({
   secret: import.meta.env.BETTER_AUTH_SECRET,
+  baseURL: import.meta.env.BETTER_AUTH_URL || 
+    (import.meta.env.PROD ? 'https://api.emetselch.xyz' : 'http://localhost:4321'),
   database: drizzleAdapter(db, { provider: 'sqlite' }),
   plugins: [
     apiKey({
