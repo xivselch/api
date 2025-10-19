@@ -38,7 +38,7 @@ export const auth = betterAuth({
       enabled: true,
       clientId: import.meta.env.DISCORD_CLIENT_ID as string,
       clientSecret: import.meta.env.DISCORD_CLIENT_SECRET as string,
-      scope: ['identify', 'guilds'],
+      scope: ['identify', 'guilds', 'email'],
       // prompt: "consent", // only to be used in production
       mapProfileToUser: async profile => profile,
       disableDefaultScope: true,
