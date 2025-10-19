@@ -1,0 +1,32 @@
+---
+import { Toaster } from "./ui/sonner";
+import Header from "./header.svelte";
+import Footer from "./footer.svelte";
+import SEO from "./seo.astro";
+import "~/styles/global.css";
+
+const { title, description, themeColor } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <SEO {title} {description} {themeColor} />
+    <script>
+      (function () {
+        const theme = localStorage.getItem("theme");
+        const systemDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+        const isDark = theme === "dark" || (theme === "auto" && systemDark);
+        if (isDark) document.documentElement.classList.add("dark");
+      })();
+    </script>
+  </head>
+  <body class="min-h-screen flex flex-col overflow-x-hidden bg-background text-foreground selection:bg-red-300/90 dark:selection:text-primary-foreground">
+    <Toaster client:only="svelte" />
+    <Header client:only="svelte" />
+    <main class="flex-1 mx-auto w-full max-w-screen-lg my-16 px-4">
+      <slot />
+    </main>
+    <Footer client:only="svelte" />
+  </body>
+</html>

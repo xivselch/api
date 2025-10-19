@@ -1,0 +1,64 @@
+{
+  "name": "api",
+  "description": "RESTful API powering emetselch.xyz",
+  "type": "module",
+  "version": "0.0.1",
+  "license": "MIT",
+  "author": "c0reme <hello@cammy.xyz>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/xivselch/api"
+  },
+  "homepage": "https://github.com/xivselch/api",
+  "bugs": "https://github.com/xivselch/api/issues",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build && docs:build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "format": "prettier --write .",
+    "db:auth": "npx @better-auth/cli generate --output=src/db/schema/auth.ts --yes",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "docs:build": "node docs/build-spec.js"
+  },
+  "dependencies": {
+    "@astrojs/netlify": "^6.5.13",
+    "@astrojs/svelte": "^7.2.0",
+    "@libsql/client": "^0.15.15",
+    "@tailwindcss/vite": "^4.1.14",
+    "astro": "^5.14.5",
+    "astro-seo": "^0.8.4",
+    "better-auth": "^1.3.27",
+    "drizzle-kit": "^0.31.5",
+    "drizzle-orm": "^0.44.6",
+    "nodecollect": "^2.0.5",
+    "svelte": "^5.40.0",
+    "tailwindcss": "^4.1.14",
+    "typescript": "^5.9.3"
+  },
+  "devDependencies": {
+    "@internationalized/date": "^3.8.1",
+    "@lucide/svelte": "^0.544.0",
+    "@tanstack/table-core": "^8.21.3",
+    "bits-ui": "^2.11.0",
+    "chalk": "^5.6.2",
+    "clsx": "^2.1.1",
+    "lint-staged": "^16.2.4",
+    "mode-watcher": "^1.1.0",
+    "openapi-comment-parser": "1.0.0",
+    "prettier": "^3.6.2",
+    "prettier-plugin-svelte": "^3.4.0",
+    "prettier-plugin-tailwindcss": "^0.7.0",
+    "svelte-sonner": "^1.0.5",
+    "tailwind-merge": "^3.3.1",
+    "tailwind-variants": "^3.1.1",
+    "ts-json-schema-generator": "^2.4.0",
+    "tw-animate-css": "^1.4.0",
+    "typescript-json-schema": "^0.65.1",
+    "yaml": "^2.8.1"
+  },
+  "lint-staged": {
+    "**/*": "prettier --write --ignore-unknown"
+  }
+}

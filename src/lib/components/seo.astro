@@ -1,0 +1,53 @@
+---
+import { SEO, type SEOProps } from "astro-seo";
+
+// for better seo results
+const defaults: SEOProps = {
+  title: "emetselch.",
+  description:
+    "A powerful RESTful API for Final Fantasy XIV data, character management, and community features.",
+  charset: "UTF-8",
+  extend: {
+    meta: [{ name: "viewport", content: "width=device-width, initial-scale=1.0" }],
+    link: [{ rel: "icon", type: "image/svg+xml", href: `/favicon.svg` }],
+  },
+  openGraph: {
+    basic: {
+      title: "emetselch.",
+      type: "website",
+      image: `/favicon.svg`,
+    },
+    optional: {
+      description:
+        "A powerful RESTful API for Final Fantasy XIV data, character management, and community features.",
+    },
+  },
+};
+
+type Props = Partial<Pick<SEOProps, "title" | "description"> & { themeColor: string }>;
+
+const { title, description = defaults.description, themeColor = "#DC2626" } = Astro.props;
+---
+
+<SEO
+  {...defaults}
+  {title}
+  titleDefault={defaults.title}
+  titleTemplate={`%s | ${defaults.title}`}
+  {description}
+  extend={{
+    ...defaults.extend,
+    meta: [...(defaults.extend?.meta ?? []), { name: "theme-color", content: themeColor }],
+  }}
+  openGraph={{
+    ...defaults.openGraph,
+    basic: {
+      ...defaults.openGraph?.basic!,
+      title: title ?? defaults.openGraph?.basic?.title!,
+    },
+    optional: {
+      ...defaults.openGraph?.optional!,
+      description: description ?? defaults.openGraph?.optional?.description!,
+    },
+  }}
+/>

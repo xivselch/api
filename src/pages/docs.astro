@@ -1,0 +1,51 @@
+---
+import SEO from "~/lib/components/seo.astro";
+import { Toaster } from "~/lib/components/ui/sonner";
+import "~/styles/global.css";
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <SEO
+      title="API Documentation"
+      description="API Documentation for the RESTful API of emetselch.xyz"
+      themeColor="#8D46E7"
+    />
+  </head>
+  <body class="min-h-screen flex flex-col overflow-x-hidden">
+    <Toaster client:only="svelte" />
+    <div id="app"></div>
+    <noscript>You need to enable JavaScript to use this API reference.</noscript>
+    <script src="https://cdn.jsdelivr.net/npm/@scalar/api-reference" is:inline></script>
+    <script is:inline>
+      function init() {
+        if (typeof Scalar !== "undefined") {
+          try {
+            Scalar.createApiReference("#app", {
+              url: "/openapi.yml", //"https://registry.scalar.com/@scalar/apis/galaxy/latest?format=json",
+              proxyUrl: "https://proxy.scalar.com",
+            });
+          } catch (error) {
+            console.error("Error initializing Scalar:", error);
+            setTimeout(init, 1000);
+          }
+        } else setTimeout(init, 100);
+      }
+
+      window.addEventListener("error", function (e) {
+        if (e.target && e.target.src && e.target.src.includes("@scalar/api-reference")) {
+          console.error("Failed to load Scalar library:", e);
+
+          const fallbackScript = document.createElement("script");
+          fallbackScript.src = "https://unpkg.com/@scalar/api-reference";
+          fallbackScript.onload = initScalar;
+          document.head.appendChild(fallbackScript);
+        }
+      });
+
+      if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
+      else init();
+    </script>
+  </body>
+</html>

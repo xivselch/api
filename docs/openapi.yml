@@ -1,0 +1,56 @@
+openapi: 3.1.0
+info:
+  title: RESTful API
+  description: |
+    Welcome to the **RESTful backend powering [emetselch.xyz](https://emetselch.xyz)**
+
+    This API provides endpoints for accessing **Final Fantasy XIV** game data, 
+    managing player characters, and engaging with community features designed for FFXIV fans.
+
+    ---
+    ## Features
+
+    - **Game Data**: Retrieve up-to-date game content, rewards, and system info.
+    - **Character Management**: Query character profiles, stats, and progression.
+    - **Community Tools**: Access endpoints supporting player engagement and group activities.
+    - **Modern & Fast**: Designed for seamless integration with web and app clients.
+
+    ---
+    ## Authentication
+    Most endpoints require some form of authentication, either an API key or a session token. Session tokens are automatically generated when you login to the website.
+
+    However, if you wish to use an API key, you can generate one by visiting your [account page](https://api.emetselch.xyz/account) and clicking the "Generate" button next to "API Keys". Once you have an API key, you can use it to authenticate your requests by adding the `x-api-key` header to your requests.
+  version: { { packageVersion } }
+  contact:
+    name: API Support
+    url: https://github.com/xivselch/api/issues
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+
+servers:
+  - url: https://api.emetselch.xyz
+    description: Production
+  - url: http://localhost:{port}
+    description: Development
+    variables:
+      port:
+        default: '4321'
+
+tags:
+  - name: Game Data
+    description: Endpoints relating to game data, such as custom deliveries, roulette types, and allied societies. These endpoints are auto-generated using data from [v2.xivapi.com](https://v2.xivapi.com/) extracted using the [`@xivapi/js`](https://github.com/xivapi/xivapi-js) package, check them out for more information.
+  - name: Characters
+    description: Endpoints relating to scraped Lodestone character data, such as character names, titles, and other metadata - such as achievements, minions and mounts.
+  - name: User
+    description: Endpoints relating to the user account. All endpoints require an API key authentication.
+  - name: Collections
+    description: Endpoints relating to the collection data being tracked by the user. All endpoints require an API key authentication.
+
+components:
+  securitySchemes:
+    apiKeyHeader:
+      type: apiKey
+      in: header
+      name: x-api-key
+      description: API key request header

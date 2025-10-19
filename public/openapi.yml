@@ -1,0 +1,560 @@
+openapi: 3.1.0
+info:
+  title: RESTful API
+  description: >
+    Welcome to the **RESTful backend powering [emetselch.xyz](https://emetselch.xyz)**
+
+
+    This API provides endpoints for accessing **Final Fantasy XIV** game data, 
+
+    managing player characters, and engaging with community features designed for FFXIV fans.
+
+
+    ---
+
+    ## Features
+
+
+    - **Game Data**: Retrieve up-to-date game content, rewards, and system info.
+
+    - **Character Management**: Query character profiles, stats, and progression.
+
+    - **Community Tools**: Access endpoints supporting player engagement and group activities.
+
+    - **Modern & Fast**: Designed for seamless integration with web and app clients.
+
+
+    ---
+
+    ## Authentication
+
+    Most endpoints require some form of authentication, either an API key or a session token. Session tokens are
+    automatically generated when you login to the website.
+
+
+    However, if you wish to use an API key, you can generate one by visiting your [account
+    page](https://api.emetselch.xyz/account) and clicking the "Generate" button next to "API Keys". Once you have an API
+    key, you can use it to authenticate your requests by adding the `x-api-key` header to your requests.
+  version: 0.0.1
+  contact:
+    name: API Support
+    url: https://github.com/xivselch/api/issues
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+servers:
+  - url: https://api.emetselch.xyz
+    description: Production
+  - url: http://localhost:{port}
+    description: Development
+    variables:
+      port:
+        default: '4321'
+tags:
+  - name: Game Data
+    description:
+      Endpoints relating to game data, such as custom deliveries, roulette types, and allied societies. These
+      endpoints are auto-generated using data from [v2.xivapi.com](https://v2.xivapi.com/) extracted using the
+      [`@xivapi/js`](https://github.com/xivapi/xivapi-js) package, check them out for more information.
+  - name: Characters
+    description:
+      Endpoints relating to scraped Lodestone character data, such as character names, titles, and other metadata
+      - such as achievements, minions and mounts.
+  - name: User
+    description: Endpoints relating to the user account. All endpoints require an API key authentication.
+  - name: Collections
+    description:
+      Endpoints relating to the collection data being tracked by the user. All endpoints require an API key
+      authentication.
+components:
+  securitySchemes:
+    apiKeyHeader:
+      type: apiKey
+      in: header
+      name: x-api-key
+      description: API key request header
+  schemas:
+    RouletteEntry:
+      type: object
+      properties:
+        name:
+          type: string
+        poetics:
+          type: number
+        uncapped:
+          type: number
+        capped:
+          type: number
+        gil:
+          type: number
+        seals:
+          type: number
+        bonus:
+          type:
+            - string
+            - 'null'
+      required:
+        - name
+        - poetics
+        - uncapped
+        - capped
+        - gil
+        - seals
+        - bonus
+      additionalProperties: false
+    DeliveryEntry:
+      type: object
+      properties:
+        id:
+          type: number
+        satisfaction:
+          type: number
+          default: 0
+        completed:
+          type: boolean
+          default: false
+      required:
+        - id
+        - satisfaction
+        - completed
+      additionalProperties: false
+    SocietyEntry:
+      type: object
+      properties:
+        id:
+          type: number
+        rank:
+          type: string
+          default: None
+        reputation:
+          type: number
+          default: 0
+        completed:
+          type: boolean
+          default: false
+      required:
+        - id
+        - rank
+        - reputation
+        - completed
+      additionalProperties: false
+    QueryCharacter:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        dc_name:
+          type: string
+        world_name:
+          type: string
+        avatar:
+          type: string
+        grand_company:
+          anyOf:
+            - type: object
+              properties:
+                name:
+                  type: string
+                title:
+                  type: number
+              required:
+                - name
+                - title
+              additionalProperties: false
+            - type: 'null'
+      required:
+        - id
+        - name
+        - dc_name
+        - world_name
+        - avatar
+        - grand_company
+      additionalProperties: false
+    Character:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        dc_name:
+          type: string
+        world_name:
+          type: string
+        avatar:
+          type: string
+        grand_company:
+          anyOf:
+            - type: object
+              properties:
+                name:
+                  type: string
+                title:
+                  type: number
+              required:
+                - name
+                - title
+              additionalProperties: false
+            - type: 'null'
+        title:
+          type: string
+        portrait:
+          type:
+            - string
+            - 'null'
+        score:
+          type: number
+          default: 0
+        achievements:
+          anyOf:
+            - type: object
+              properties:
+                total:
+                  type: number
+                  default: 0
+                score:
+                  type: number
+                  default: 0
+              required:
+                - total
+                - score
+              additionalProperties: false
+            - type: 'null'
+        minions:
+          type:
+            - number
+            - 'null'
+          default: 0
+        mounts:
+          type:
+            - number
+            - 'null'
+          default: 0
+        facewear:
+          type:
+            - number
+            - 'null'
+          default: 0
+        deliveries:
+          type: array
+          items:
+            $ref: '#/components/schemas/DeliveryEntry'
+          default: []
+        societies:
+          type: array
+          items:
+            $ref: '#/components/schemas/SocietyEntry'
+          default: []
+        public:
+          type: boolean
+          default: false
+        parsed_at:
+          type: string
+          format: date-time
+      required:
+        - achievements
+        - avatar
+        - dc_name
+        - deliveries
+        - facewear
+        - grand_company
+        - id
+        - minions
+        - mounts
+        - name
+        - parsed_at
+        - portrait
+        - public
+        - score
+        - societies
+        - title
+        - world_name
+      additionalProperties: false
+    User:
+      type: object
+      properties:
+        name:
+          type: string
+        username:
+          type: string
+        email:
+          type: string
+        image:
+          type:
+            - string
+            - 'null'
+      additionalProperties: false
+    Response:
+      type: object
+      properties:
+        code:
+          type: number
+        message:
+          type: string
+      required:
+        - code
+        - message
+      additionalProperties: false
+paths:
+  /characters:
+    get:
+      summary: Get characters by name
+      description: Gets Lodestone characters based on query parameters.
+      tags:
+        - Characters
+      parameters:
+        - name: name
+          in: query
+          description: The character name
+          required: true
+          schema:
+            type: string
+        - name: world_name
+          in: query
+          description: The world name
+          required: false
+          schema:
+            type: string
+        - name: dc_name
+          in: query
+          description: The datacenter name
+          required: false
+          schema:
+            type: string
+        - name: region
+          in: query
+          description: The region name
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/QueryCharacter'
+        default:
+          description: An error occurred
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+  /game/deliveries:
+    get:
+      summary: Get delivery satisfaction NPCs
+      description: Get all delivery satisfaction NPCs and their requirements.
+      tags:
+        - Game Data
+      responses:
+        '200':
+          description: A JSON array of delivery entries
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DeliveryEntry'
+  /game/roulette:
+    get:
+      summary: Get roulette data
+      description: Returns information about various roulette types and their rewards
+      tags:
+        - Game Data
+      responses:
+        '200':
+          description: A JSON array of roulette entries
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RouletteEntry'
+  /game/societies:
+    get:
+      summary: Get beast tribe societies data
+      description: Returns information about beast tribe societies and their reputation systems
+      tags:
+        - Game Data
+      responses:
+        '200':
+          description: A JSON array of society entries
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SocietyEntry'
+  /user/characters:
+    get:
+      summary: Get user's characters
+      description: Gets the user's saved characters list. Requires an API key authentication.
+      tags:
+        - User
+      security:
+        - apiKeyHeader: []
+      responses:
+        '200':
+          description: Characters found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Character'
+        '401':
+          description: Unauthorized, missing or invalid API key.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not found, user has no characters saved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      summary: Update user's characters
+      description:
+        Update the user's saved characters list. If the character(s) already exist in the list, they will not be
+        duplicated. Requires an API key authentication.
+      tags:
+        - User
+      security:
+        - apiKeyHeader: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: string
+        required: true
+      responses:
+        '200':
+          description: Success, returns the updated list of character IDs.
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Bad request, invalid or missing character IDs.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized, missing or invalid API key.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /characters/{id}/deliveries:
+    put:
+      summary: Update character's custom deliveries
+      description:
+        Updates the satisfaction level and completion status for provided custom deliveries. This endpoint will
+        also add new deliveries to the character if they are not already present. Requires an API key authentication.
+      tags:
+        - Characters
+      parameters:
+        - name: id
+          in: path
+          description: The Lodestone character identifier
+          required: true
+          schema:
+            type: string
+      security:
+        - apiKeyHeader: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/DeliveryEntry'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+        default:
+          description: An error occurred
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+  /characters/{id}:
+    get:
+      summary: Get character from identifier
+      description:
+        Gets a Lodestone character from an identifier, these characters are private by default. To access character
+        collection data, you must be authenticated using an API key.
+      tags:
+        - Characters
+      parameters:
+        - name: id
+          in: path
+          description: The Lodestone character identifier
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Character'
+        default:
+          description: An error occurred
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+  /characters/{id}/societies:
+    put:
+      summary: Update character's allied societies
+      description:
+        Updates the reputation level and completion status for provided allied societies. This endpoint will also
+        add new societies to the character if they are not already present. Requires an API key authentication.
+      tags:
+        - Characters
+      parameters:
+        - name: id
+          in: path
+          description: The Lodestone character identifier
+          required: true
+          schema:
+            type: string
+      security:
+        - apiKeyHeader: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/SocietyEntry'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+        default:
+          description: An error occurred
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
